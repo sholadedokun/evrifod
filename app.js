@@ -25,7 +25,6 @@ var storage = multer.diskStorage({
 });
 
 var upload = multer({ storage: storage }).array('files');
-var routes = require('./routes/index');
 
 //routes configurations
 var adminActions = require('./routes/adminActions');
@@ -34,8 +33,7 @@ var appActions = require('./routes/appActions');
 //mongoose configurations
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/pronitaexpress-development')
-// mongoose.connect('mongodb://pronitadb:pronitadb@ds157631.mlab.com:57631/pronitadb')
+mongoose.connect('mongodb://localhost/evrifod-development')
     .then(() => console.log('database connected'))
     .catch((err) => console.error(err))
 
@@ -74,7 +72,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(expressSession({
-    secret: 'bytes-And-Binaries-Secrets-with-pronita',
+    secret: 'bytes-And-Binaries-Secrets-with-evrifod',
     saveUninitialized: true,
     resave: true,
     // store: new MongoStore({ mongooseConnection: mongoose.connection })
@@ -82,8 +80,9 @@ app.use(expressSession({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'reactpronita')));
-app.use(express.static(path.join(__dirname, '/')));
+app.use(express.static(path.join(__dirname, 'webapp')));
+app.use(express.static(path.join(__dirname, 'mobileapp')));
+app.use(express.static(path.join(__dirname, 'admin')));
 
 //app.use(fileupload());
 //upload files
@@ -93,7 +92,6 @@ app.post('/upload', function(req, res, next) {
         res.json(req.files)
     })
 })
-app.use('/', routes);
 app.use('/adminActions', adminActions);
 app.use('/appActions', appActions);
 

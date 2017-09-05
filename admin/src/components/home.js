@@ -4,6 +4,7 @@ import {Grid, Row, Col} from 'react-bootstrap';
 import ProductContainer from './productContainer';
 import { BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import AddnewMeal from './addNewMeal';
+import Settings from './settings';
 import Icon from './icon';
 import _ from 'lodash';
 import {connect} from 'react-redux';
@@ -19,12 +20,19 @@ class userProfile extends (Component){
             path:'',
             component: ()=><ProductContainer products={this.props.products} />
         },
-        addNew:{
+        addNewMeal:{
             label:'Add a new Meal',
-            name:'addNew',
+            name:'addNewMeal',
             icon:'plus',
             path: '/addMeal',
             component: AddnewMeal
+        },
+        settings:{
+            label:'Settings',
+            name:'settings',
+            icon:'gear',
+            path: '/settings',
+            component: Settings
         }
     }
     componentWillMount(nextProps){

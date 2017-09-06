@@ -1,6 +1,0 @@
-
-
-
-	
-
-	// return ad.addCart();

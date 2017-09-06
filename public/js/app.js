@@ -1,1 +1,0 @@
-var pronita = angular.module('Pronita', ['ngRoute']);

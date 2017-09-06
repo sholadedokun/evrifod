@@ -76,16 +76,14 @@ var inventorySettingsSchema= new Schema({
     dateCreated:{type: Date, default: Date.now}
 });
 var categorySchema= new Schema({
-    name: String,
-    description: String,
+    name: {type:String, required:true, index:{unique:true, dropDups: true}},
+    description: {type:String, required:true, index:{unique:true, dropDups: true}},
     avartar:String,
-    subCategories:[{type:Schema.Types.ObjectId, ref:'subcategory'}],
     dateCreated:{type: Date, default: Date.now}
 })
-var subCategorySchema= new Schema({
-    category:{type:Schema.Types.ObjectId, ref:'category'},
-    SubCategoryname: String,
-    description: String,
+var typeSchema= new Schema({
+    name: {type:String, required:true, index:{unique:true, dropDups: true}},
+    description: {type:String, required:true, index:{unique:true, dropDups: true}},
     avartar:String,
     dateCreated:{type: Date, default: Date.now}
 })
@@ -110,11 +108,11 @@ userSchema.pre('save', function(next) {
 
     // generate a salt
     bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
-        if (err) return next(err);
+        if (err) return res.send(err);
 
         // hash the password along with our new salt
         bcrypt.hash(user.password, salt, null, function(err, hash) {
-            if (err) return next(err);
+            if (err) return res.send(err);
 
             // override the cleartext password with the hashed one
             user.password = hash;
@@ -143,7 +141,7 @@ var emailSubscriberSchema= new Schema({
 })
 module.exports.inventory = mongoose.model('inventory', inventorySchema);
 module.exports.category= mongoose.model('category', categorySchema);
-module.exports.subcategory= mongoose.model('subcategory', subCategorySchema);
+module.exports.type= mongoose.model('type', typeSchema);
 module.exports.inventorySettings = mongoose.model('inventorySettings', inventorySettingsSchema);
 module.exports.reviewQuestions = mongoose.model('reviewQuestions', reviewQuestionsSchema);
 module.exports.user = mongoose.model('user', userSchema);

@@ -9,7 +9,7 @@ module.exports = function (app) {
 
 router.get('/', function (req, res, next) {
   Article.find(function (err, articles) {
-    if (err) return next(err);
+    if (err) return res.send(err);
     res.render('index', {
       title: 'Generator-Express MVC',
       articles: articles

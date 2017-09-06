@@ -16,3 +16,7 @@ export const AUTH_USER = 'auth_user';
 export const UNAUTH_USER = 'unauth_user';
 export const AUTH_ERROR = 'auth_error';
 export const FETCH_OFFERS = 'fetch_offers';
+
+//Settings action
+export const ADD_CATEGORY = "add_category"
+export const ADD_MEAL_TYPE = "add_meal_type"

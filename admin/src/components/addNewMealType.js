@@ -3,18 +3,17 @@ import Heading from './heading';
 import {Grid, Row, Col} from 'react-bootstrap';
 import { Field, FieldArray, reduxForm } from 'redux-form';
 import {connect} from 'react-redux';
-import {addNewCategory} from '../actions/settingsAction'
+import {addNewMealType} from '../actions/settingsAction'
 import Icon from './icon';
-import {renderInput, renderOption, renderTextarea} from './commonFilters'
+import {renderInput, renderTextarea} from './commonFilters'
 import _ from 'lodash';
 import Button from './button'
-import Image from './image'
-import Dropzone from 'react-dropzone';
 
-class AddNewCategory  extends Component{
+
+class AddNewMalType  extends Component{
     onSubmit(values){
         //call action creators to upload the category...
-        this.props.addNewCategory(values);
+        this.props.addNewMealType(values);
         // .then(data=> this.props.history.push('/userAccount'))
     }
     render(){
@@ -23,10 +22,10 @@ class AddNewCategory  extends Component{
             <Col xs={12}>
                 <form onSubmit={ handleSubmit(this.onSubmit.bind(this)) }>
                     <div className="field half">
-                        <Field component={renderInput} name="name" placeholder="What this food category is called" />
+                        <Field component={renderInput} name="name" placeholder="Meal type e.g snack, drink" />
                     </div>
                     <div className="field half">
-                        <Field component={renderTextarea} name="description" placeholder="Give a brief description of this meal category" rows="7" />
+                        <Field component={renderTextarea} name="description" placeholder="Give a brief description of this meal type" rows="7" />
                     </div>
                     <input type="submit" value="Save" icon="save" />
                 </form>
@@ -43,7 +42,7 @@ function mapStateToProps(state) {
 function validate(formProps) {
     const errors = {};
     if (!formProps.name) {
-        errors.name = 'Please enter a Name for the category';
+        errors.name = 'Please enter a Name for the Meal Type';
     }
     if (!formProps.description) {
         errors.description = 'Please enter your category\'s Brief';
@@ -54,5 +53,5 @@ export default reduxForm({
     validate,
     form: 'addNewCategory'
 })(
-    connect(mapStateToProps, {addNewCategory})(AddNewCategory)
+    connect(mapStateToProps, {addNewMealType})(AddNewMalType)
 )

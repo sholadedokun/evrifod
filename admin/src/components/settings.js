@@ -3,8 +3,9 @@ import Heading from './heading';
 import {Grid, Row, Col} from 'react-bootstrap';
 import { Field, FieldArray, reduxForm } from 'redux-form';
 import {connect} from 'react-redux';
-import {fetchAllCategories, fetchAllSubCategories, addNewProduct} from '../actions/addNewMeal'
+import {fetchAllCategories, fetchAllSubCategories, addNewProduct} from '../actions/mealActions'
 import AddNewCategory from './addNewCategory';
+import AddNewMealType from './addNewMealType';
 import Icon from './icon';
 import {renderInput, renderOption, renderTextarea} from './commonFilters'
 import _ from 'lodash';
@@ -21,8 +22,12 @@ export default class settings extends Component{
             <Grid>
                 <Heading title="Settings" marginBottom="5px" size="md"/>
                 <Col xs={12}>
-                    <Heading title="Add Food Category" marginBottom="5px" size="sm"/>
+                    <Heading title="Add New Food Category" marginBottom="5px" size="sm"/>
                     <AddNewCategory />
+                </Col>
+                <Col xs={12}>
+                    <Heading title="Add New Food Type" marginBottom="5px" size="sm"/>
+                    <AddNewMealType />
                 </Col>
             </Grid>
         )

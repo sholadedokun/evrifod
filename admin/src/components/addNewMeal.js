@@ -3,7 +3,7 @@ import Heading from './heading';
 import {Grid, Row, Col} from 'react-bootstrap';
 import { Field, FieldArray, reduxForm } from 'redux-form';
 import {connect} from 'react-redux';
-import {fetchAllCategories, fetchAllSubCategories, addNewProduct} from '../actions/addNewMeal'
+import {fetchAllCategories, fetchAllSubCategories, addNewMeal} from '../actions/mealActions'
 import Icon from './icon';
 import {renderOption, renderTextarea} from './commonFilters'
 import _ from 'lodash';
@@ -495,5 +495,5 @@ export default reduxForm({
     validate,
     form: 'addNewProduct'
 })(
-    connect(mapStateToProps, {fetchAllCategories, fetchAllSubCategories, addNewProduct})(AddNewProduct)
+    connect(mapStateToProps, {fetchAllCategories, fetchAllSubCategories, addNewMeal})(AddNewProduct)
 )

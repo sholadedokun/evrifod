@@ -1,48 +1,46 @@
 import axios from 'axios';
 import { BrowserRouter as Router } from 'react-router-dom';
 import {
-  FETCH_CATEGORIES,
-  FETCH_SUBCATEGORIES,
-  ADD_NEW_PRODUCT,
-  UNAUTH_USER,
+  ADD_CATEGORY,
+  ADD_MEAL_TYPE,
   AUTH_ERROR,
-  FETCH_OFFERS
+  ADD_NEW_PRODUCT
 } from './actionTypes';
 import _ from "lodash";
-const ROOT_URL = 'http://localhost:3000/appActions';
-export function fetchAllCategories() {
+const ROOT_URL = 'http://localhost:3000/adminActions';
+export function addNewCategory(categoryValues) {
     return function(dispatch) {
         return new Promise( (resolve, reject)=>{
-            axios.get(`${ROOT_URL}/category`)
+            axios.post(`${ROOT_URL}/category`, categoryValues )
                 .then(response => {
-                    dispatch({ type: FETCH_CATEGORIES,
+                    dispatch({ type: ADD_CATEGORY,
                         payload: response.data
-                     });
+                    });
                     resolve()
                 })
                 .catch(() => {
-                    dispatch(inventoryError('Error Fetching Categoriee , Please Check your internet and try again.'));
+                    dispatch(inventoryError('Error Adding Categorie, Please Check your internet and try again.'));
                     reject()
                 });
         })
   }
 }
-export function fetchAllSubCategories(category) {
+export function addNewMealType(typeValues) {
     return function(dispatch) {
         return new Promise( (resolve, reject)=>{
-            axios.get(`${ROOT_URL}/subCategory`, {category})
+            axios.post(`${ROOT_URL}/type`, typeValues )
                 .then(response => {
-                    dispatch({ type: FETCH_SUBCATEGORIES,
-                        payload: {categoryId:category, subCategories:response.data}
-                     });
-                     resolve(category)
+                    dispatch({ type: ADD_MEAL_TYPE,
+                        payload: response.data
+                    });
+                    resolve()
                 })
-                .catch((e) => {
-                    dispatch(inventoryError('Error Fetching Categoriee , Please Check your internet and try again.'));
-                    reject(e)
+                .catch(() => {
+                    dispatch(inventoryError('Error Adding meal type , Please Check your internet and try again.'));
+                    reject()
                 });
-            })
-        }
+        })
+  }
 }
 export function inventoryError(error) {
   return {
@@ -110,19 +108,6 @@ export function addNewProduct(document){
             //     payload: response.data
             // });
             // console.log(response)
-        });
-    }
-}
-export function fetchProduct() {
-    return function(dispatch) {
-        axios.get(`${ROOT_URL}/inventory`, {
-            headers: { authorization: localStorage.getItem('PronitaToken') }
-        })
-        .then(response => {
-            dispatch({
-                type: FETCH_OFFERS,
-                payload: response.data
-            });
         });
     }
 }

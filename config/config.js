@@ -6,31 +6,31 @@ var config = {
   development: {
     root: rootPath,
     app: {
-      name: 'pronitaexpress'
+      name: 'evrifodexpress'
     },
     port: process.env.PORT || 3000,
-    db: 'mongodb://localhost/pronitaexpress-development',
-    secret: 'pronitaSecretWithOlushola'
+    db: 'mongodb://localhost/evrifodexpress-development',
+    secret: 'evrifodSecretWithOlushola'
   },
 
   test: {
     root: rootPath,
     app: {
-      name: 'pronitaexpress'
+      name: 'evrifodexpress'
     },
     port: process.env.PORT || 3000,
-    db: 'mongodb://localhost/pronitaexpress-test',
-    secret: 'pronitaSecretWithOlushola'
+    db: 'mongodb://localhost/evrifodexpress-test',
+    secret: 'evrifodSecretWithOlushola'
   },
 
   production: {
     root: rootPath,
     app: {
-      name: 'pronitaexpress'
+      name: 'evrifodexpress'
     },
     port: process.env.PORT || 3000,
-    db: 'mongodb://localhost/pronitaexpress-production',
-    secret: 'pronitaSecretWithOlushola'
+    db: 'mongodb://localhost/evrifodexpress-production',
+    secret: 'evrifodSecretWithOlushola'
   }
 };
 

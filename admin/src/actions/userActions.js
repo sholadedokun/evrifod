@@ -19,7 +19,7 @@ export function signinUser({ identity, password }) {
                 // - Update state to indicate user is authenticated
                 dispatch({ type: AUTH_USER });
                 // - Save the JWT token
-                localStorage.setItem('PronitaToken', response.data.token);
+                localStorage.setItem('EvrifodToken', response.data.token);
                 resolve(response)
             })
             .catch(() => {
@@ -38,7 +38,7 @@ export function signupUser(values) {
             .then(response => {
 
                 dispatch({ type: AUTH_USER });
-                localStorage.setItem('PronitaToken', response.data.token);
+                localStorage.setItem('EvrifodToken', response.data.token);
                 resolve (response)
             })
             .catch(error => {
@@ -57,14 +57,14 @@ export function authError(error) {
 }
 
 export function signoutUser() {
-  localStorage.removeItem('PronitaToken');
+  localStorage.removeItem('EvrifodToken');
   return { type: UNAUTH_USER };
 }
 
 export function fetchProduct() {
     return function(dispatch) {
         axios.get(`${ROOT_URL}/inventory`, {
-            headers: { authorization: localStorage.getItem('PronitaToken') }
+            headers: { authorization: localStorage.getItem('EvrifodToken') }
         })
         .then(response => {
             dispatch({

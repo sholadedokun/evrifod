@@ -17,7 +17,7 @@ import './styles/App.css';
 const createStoreWithMiddleware = applyMiddleware(reduxThunk)(createStore);
 const store = createStoreWithMiddleware(reducers);
 
-const token = localStorage.getItem('PronitaToken');
+const token = localStorage.getItem('EvrifodToken');
 // If we have a token, consider the user to be signed in
 if (token) {
   // we need to update application state

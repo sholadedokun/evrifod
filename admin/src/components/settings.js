@@ -14,20 +14,57 @@ import Image from './image'
 import Dropzone from 'react-dropzone';
 
 export default class settings extends Component{
+    constructor(){
+        super();
+        this.state={
+            settingOptions:{
+                Category: AddNewCategory,
+                "Meal Type": AddNewMealType
+            },
+            currentSettingsTitle:'Category',
+            currentSetting: AddNewCategory
+        }
+        this.swapSettings=this.swapSettings.bind(this)
+    }
     componentWillMount(){
 
     }
+    swapSettings(e){
+        this.setState(
+            {
+                currentSetting:this.state.settingOptions[e.target.value],
+                currentSettingsTitle: e.target.value
+            }
+        )
+    }
+    showForm(){
+        let Setting= this.state.currentSetting
+        console.log(Setting)
+        return(
+            <Col xs={12}>
+                <Heading title={this.state.currentSettingsTitle} marginBottom="5px" size="sm"/>
+                <Setting />
+            </Col>
+
+        )
+    }
     render(){
+        const {settingOptions, currentSettingsTitle, currentSetting } = this.state;
         return(
             <Grid>
                 <Heading title="Settings" marginBottom="5px" size="md"/>
                 <Col xs={12}>
-                    <Heading title="Add New Food Category" marginBottom="5px" size="sm"/>
-                    <AddNewCategory />
-                </Col>
-                <Col xs={12}>
-                    <Heading title="Add New Food Type" marginBottom="5px" size="sm"/>
-                    <AddNewMealType />
+
+                    <select onChange={this.swapSettings}>
+                        {
+                            _.map(settingOptions, (item, index)=>{
+                                return(
+                                    <option value={index}>Add New {index}</option>
+                                )
+                            })
+                        }
+                    </select>
+                    {this.showForm()}
                 </Col>
             </Grid>
         )

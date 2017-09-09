@@ -17,8 +17,8 @@ var smtpConfig = {
     port: 465,
     secure: true, // use SSL
     auth: {
-        user: 'info@pronita.com',
-        pass: 'Pronita1@'
+        user: 'info@evrifod.com',
+        pass: 'Evrifod1@'
     }
 };
 var transporter = nodemailer.createTransport(smtpConfig)
@@ -356,9 +356,9 @@ router.post('/contact', function(req, res, next){
     console.log(params)
     var emailbody='<b>Dear '+params.name+', </b> <br>';
     emailbody+='Thank you for contacting us. Our representative will contact you shortly.';
-    emailbody+='<br><br><b>Pronita Team</b>';
-    var fromE="Pronita <info@pronita.com>";
-    var subject="Thanks for contacting Pronita ";
+    emailbody+='<br><br><b>Evrifod Team</b>';
+    var fromE="Evrifod <info@evrifod.com>";
+    var subject="Thanks for contacting Evrifod ";
     console.log(prepareEmail(fromE, params.email, subject, emailbody))
 
     subject = "An Online User contacted you.";
@@ -368,9 +368,9 @@ router.post('/contact', function(req, res, next){
     emailbody+= '<br><b>User Name:</b>'+params.name;
     emailbody+= '<br><b>User Phone Number:</b>'+params.phone;
     emailbody+= '<br><b>User Message:<b> '+params.message;
-    fromE="Pronita Webmaster<info@pronita.com>";
+    fromE="Evrifod Webmaster<info@evrifod.com>";
     bcc='sholadedokun@yahoo.com';
-    to='info@pronita.com';
+    to='info@evrifod.com';
     res.json(prepareEmail(fromE, to, subject, emailbody,bcc));
 });
 router.post('/addSubscriber', function(req, res, next){
@@ -389,10 +389,10 @@ router.post('/addSubscriber', function(req, res, next){
                 // setup e-mail data with unicode symbols
                 emailbody='<b>Dear Subscriber, </b> <br>';
                 emailbody+='Thank you for subscribing to our Newsletter. We are glad to have you on board.';
-                emailbody+='<br><br><b>Pronita Team</b>';
+                emailbody+='<br><br><b>Evrifod Team</b>';
                 subject='Thanks for subscribing to our Newsletter.';
             })
-            res.json(prepareEmail('Pronita <info@pronita.com>', req.body.emailAddress, subject, emailbody));
+            res.json(prepareEmail('Evrifod <info@evrifod.com>', req.body.emailAddress, subject, emailbody));
         }
         else{   res.json({error:'You have already subscribed, thanks for trying again', data:emailSubscriber});   }
     })

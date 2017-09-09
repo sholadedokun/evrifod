@@ -62,7 +62,7 @@ export function addNewProduct(document){
         //lets first send the pictures and related files
         axios.post("http://localhost:3000/upload", file, {
             headers: {
-                authorization: localStorage.getItem('PronitaToken'),
+                authorization: localStorage.getItem('EvrifodToken'),
                 'Content-Type':  `multipart/form-data`
             }
         })

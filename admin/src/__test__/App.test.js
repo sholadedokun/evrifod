@@ -34,5 +34,5 @@ describe('>>>H O M E --- Snapshot',()=>{
 
 it('renders without crashing', () => {
   let  wrapper = shallow(<App />);
-  expect(wrapper.contains(<Header  title="Pronita" />)).toBe(true);
+  expect(wrapper.contains(<Header  title="Evrifod" />)).toBe(true);
 });

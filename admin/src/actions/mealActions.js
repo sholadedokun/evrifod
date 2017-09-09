@@ -64,7 +64,7 @@ export function addNewMeal(document){
         //lets first send the pictures and related files
         axios.post("http://localhost:3000/upload", file, {
             headers: {
-                authorization: localStorage.getItem('PronitaToken'),
+                authorization: localStorage.getItem('EvrifodToken'),
                 'Content-Type':  `multipart/form-data`
             }
         })
@@ -116,7 +116,7 @@ export function addNewMeal(document){
 export function fetchProduct() {
     return function(dispatch) {
         axios.get(`${ROOT_URL}/inventory`, {
-            headers: { authorization: localStorage.getItem('PronitaToken') }
+            headers: { authorization: localStorage.getItem('EvrifodToken') }
         })
         .then(response => {
             dispatch({

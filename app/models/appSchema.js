@@ -27,37 +27,7 @@ var inventorySchema= new Schema({
     dateCreated:{ type: Date, default: Date.now },
     lastUpdated:{ type: Date, default: Date.now }
 });
-var reviewQuestionsSchema= new Schema({
-    title: String,
-    questionText: Array,
-    inventoryId:{type:Schema.Types.ObjectId, ref:'inventory'},
-    dateCreated:{type: Date, default: Date.now}
-});
-var keyFeaturesSchema= new Schema({
-    title: String,
-    description: String,
-    inventoryId:{type:Schema.Types.ObjectId, ref:'inventory'},
-    dateCreated:{type: Date, default: Date.now}
-});
 
-var specificationSchema= new Schema({
-    title: String,
-    description: String,
-    inventoryId:{type:Schema.Types.ObjectId, ref:'inventory'},
-    dateCreated:{type: Date, default: Date.now}
-});
-var offerDetailsSchema= new Schema({
-    title: String,
-    description: String,
-    inventoryId:{type:Schema.Types.ObjectId, ref:'inventory'},
-    dateCreated:{type: Date, default: Date.now}
-});
-var offerConditionsSchema= new Schema({
-    title: String,
-    description: String,
-    inventoryId:{type:Schema.Types.ObjectId, ref:'inventory'},
-    dateCreated:{type: Date, default: Date.now}
-});
 var likesSchema= new Schema({
     user: {type:Schema.Types.ObjectId, ref:'user', required:true},
     objectId:{type:Schema.Types.ObjectId, required:true},
@@ -81,7 +51,13 @@ var categorySchema= new Schema({
     avartar:String,
     dateCreated:{type: Date, default: Date.now}
 })
-var typeSchema= new Schema({
+var mealTypeSchema= new Schema({
+    name: {type:String, required:true, index:{unique:true, dropDups: true}},
+    description: {type:String, required:true, index:{unique:true, dropDups: true}},
+    avartar:String,
+    dateCreated:{type: Date, default: Date.now}
+})
+var nutritionClassSchema= new Schema({
     name: {type:String, required:true, index:{unique:true, dropDups: true}},
     description: {type:String, required:true, index:{unique:true, dropDups: true}},
     avartar:String,
@@ -141,15 +117,11 @@ var emailSubscriberSchema= new Schema({
 })
 module.exports.inventory = mongoose.model('inventory', inventorySchema);
 module.exports.category= mongoose.model('category', categorySchema);
-module.exports.type= mongoose.model('type', typeSchema);
+module.exports.mealType= mongoose.model('mealType', mealTypeSchema);
+module.exports.nutritionClass= mongoose.model('nutritionClass', nutritionClassSchema);
 module.exports.inventorySettings = mongoose.model('inventorySettings', inventorySettingsSchema);
-module.exports.reviewQuestions = mongoose.model('reviewQuestions', reviewQuestionsSchema);
 module.exports.user = mongoose.model('user', userSchema);
 module.exports.tags = mongoose.model('tags', tagSchema);
 module.exports.emailSubscriber = mongoose.model('emailSubscriber', emailSubscriberSchema);
-module.exports.keyFeatures = mongoose.model('keyFeatures', keyFeaturesSchema);
-module.exports.specifications= mongoose.model('specifications', specificationSchema);
-module.exports.offerDetails = mongoose.model('offerDetails', offerDetailsSchema);
-module.exports.offerConditions = mongoose.model('offerConditions', offerConditionsSchema);
 module.exports.likes = mongoose.model('likes', likesSchema);
 module.exports.comments = mongoose.model('comments', commentsSchema);

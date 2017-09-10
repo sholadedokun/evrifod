@@ -32,12 +32,18 @@ router.get('/category', function(req, res, next){
         res.json(category)
     })
 });
-router.get('/subcategory', function(req, res, next) {
-    adminSchema.subcategory.find()
-    .populate('category')
-    .exec(function(err, subcategory){
+router.get('/mealtypes', function(req, res, next) {
+    adminSchema.mealType.find()
+    .exec(function(err, mealtypes){
         if(err) return res.send(err);
-        res.json(subcategory)
+        res.json(mealtypes)
+    })
+});
+router.get('/nutritions', function(req, res, next) {
+    adminSchema.nutritionClass.find()
+    .exec(function(err, nutritionClass){
+        if(err) return res.send(err);
+        res.json(nutritionClass)
     })
 });
 
@@ -120,8 +126,15 @@ router.post('/category', function(req, res, next){
         res.json(post);
     })
 });
-router.post('/type', function(req, res, next){
-    adminSchema.type.create(req.body, function(err, post){
+router.post('/mealtype', function(req, res, next){
+    adminSchema.mealType.create(req.body, function(err, post){
+        if(err) return res.send(err)
+        res.json(post);
+    })
+
+});
+router.post('/nutrition', function(req, res, next){
+    adminSchema.nutritionClass.create(req.body, function(err, post){
         if(err) return res.send(err)
         res.json(post);
     })

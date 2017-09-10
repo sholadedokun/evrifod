@@ -1,61 +1,62 @@
 import React, {Component} from 'react';
 import Heading from './heading';
-import {Grid, Row, Col} from 'react-bootstrap';
-import { Field, FieldArray, reduxForm } from 'redux-form';
+import {Grid, Col} from 'react-bootstrap';
 import {connect} from 'react-redux';
-import {fetchAllCategories, fetchAllSubCategories, addNewProduct} from '../actions/mealActions'
-import AddNewCategory from './addNewCategory';
-import AddNewMealType from './addNewMealType';
-import Icon from './icon';
-import {renderInput, renderOption, renderTextarea} from './commonFilters'
+import { addSettings} from '../actions/settingsAction'
+import {fetchAllNutrition} from '../actions/mealInventoryActions'
+import SettingForm from './settingForm';
 import _ from 'lodash';
-import Button from './button'
-import Image from './image'
-import Dropzone from 'react-dropzone';
-
-export default class settings extends Component{
+class settings extends Component{
     constructor(){
         super();
         this.state={
             settingOptions:{
-                Category: AddNewCategory,
-                "Meal Type": AddNewMealType
-            },
-            currentSettingsTitle:'Category',
-            currentSetting: AddNewCategory
-        }
-        this.swapSettings=this.swapSettings.bind(this)
-    }
-    componentWillMount(){
+                Category: {
+                    endpoint:'category',
 
-    }
-    swapSettings(e){
-        this.setState(
-            {
-                currentSetting:this.state.settingOptions[e.target.value],
-                currentSettingsTitle: e.target.value
-            }
-        )
+                },
+                "Meal Type": {
+                    enpoint:'mealtype',
+                },
+                "Nutrition Class":{
+                    endpoint:'nutrition',
+                },
+                "Ingredient":{
+                    endpoint:'ingredient',
+                }
+
+            },
+            currentSettingsTitle:'Category'
+        }
     }
     showForm(){
-        let Setting= this.state.currentSetting
-        console.log(Setting)
         return(
             <Col xs={12}>
-                <Heading title={this.state.currentSettingsTitle} marginBottom="5px" size="sm"/>
-                <Setting />
+                <Heading title={`Add New ${this.state.currentSettingsTitle}`} marginBottom="5px" size="sm"/>
+                <SettingForm  name={this.state.currentSettingsTitle} onSubmitting={this.postValues.bind(this)} allNutritions={this.props.allNutritions} />
             </Col>
 
         )
     }
+    getSettingForm(e){
+        const selectedFrom = e.target.value;
+        if(selectedFrom==='Ingredient'){
+            this.props.fetchAllNutrition()
+        }
+
+        this.setState({currentSettingsTitle: selectedFrom})
+    }
+    postValues(values){
+        this.props.addSettings(values, this.state.settingOptions[this.state.currentSettingsTitle].endpoint )
+    }
     render(){
-        const {settingOptions, currentSettingsTitle, currentSetting } = this.state;
+        const {settingOptions, currentSettingsTitle, currentSetting, newSettings } = this.state;
         return(
             <Grid>
                 <Heading title="Settings" marginBottom="5px" size="md"/>
                 <Col xs={12}>
 
-                    <select onChange={this.swapSettings}>
+                    <select onChange={this.getSettingForm.bind(this)}>
                         {
                             _.map(settingOptions, (item, index)=>{
                                 return(
@@ -65,8 +66,18 @@ export default class settings extends Component{
                         }
                     </select>
                     {this.showForm()}
+                    { newSettings ?
+                        <span>New {currentSettingsTitle} was succeffuly Added</span>:''
+                    }
                 </Col>
             </Grid>
         )
     }
 }
+function mapStateToProps(state) {
+  return { errorMessage: state.user.error,
+           newSettings: state.settings.newSettings,
+           allNutritions:state.inventory.allNutritions
+   };
+}
+export default connect(mapStateToProps, {addSettings, fetchAllNutrition})(settings)

@@ -2,14 +2,15 @@ import axios from 'axios';
 import { BrowserRouter as Router } from 'react-router-dom';
 import {
   FETCH_CATEGORIES,
-  FETCH_SUBCATEGORIES,
+  FETCH_MEAL_TYPES,
+  FETCH_NUTRITION,
   ADD_NEW_PRODUCT,
   UNAUTH_USER,
   AUTH_ERROR,
   FETCH_OFFERS
 } from './actionTypes';
 import _ from "lodash";
-const ROOT_URL = 'http://localhost:3000/appActions';
+const ROOT_URL = 'http://localhost:3000/adminActions';
 export function fetchAllCategories() {
     return function(dispatch) {
         return new Promise( (resolve, reject)=>{
@@ -27,22 +28,35 @@ export function fetchAllCategories() {
         })
   }
 }
-export function fetchAllSubCategories(category) {
+export function fetchAllMealTypes() {
     return function(dispatch) {
         return new Promise( (resolve, reject)=>{
-            axios.get(`${ROOT_URL}/subCategory`, {category})
+            axios.get(`${ROOT_URL}/mealtypes`)
                 .then(response => {
-                    dispatch({ type: FETCH_SUBCATEGORIES,
-                        payload: {categoryId:category, subCategories:response.data}
+                    dispatch({ type: FETCH_MEAL_TYPES,
+                        payload: response.data
                      });
-                     resolve(category)
+                     resolve(response.data)
                 })
                 .catch((e) => {
-                    dispatch(inventoryError('Error Fetching Categoriee , Please Check your internet and try again.'));
+                    dispatch(inventoryError('Error Fetching Meal Types , Please Check your internet and try again.'));
                     reject(e)
                 });
             })
         }
+}
+export function fetchAllNutrition() {
+    return function(dispatch) {
+        axios.get(`${ROOT_URL}/nutritions`)
+            .then(response => {
+                dispatch({ type: FETCH_NUTRITION,
+                    payload: response.data
+                 });
+            })
+            .catch(() => {
+                dispatch(inventoryError('Error Fetching nutritions , Please Check your internet and try again.'));
+            });
+  }
 }
 export function inventoryError(error) {
   return {

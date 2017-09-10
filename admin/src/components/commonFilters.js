@@ -60,3 +60,35 @@ export function renderAlert() {
     );
   }
 }
+export function AutoFill({list, whenSelected, onType}){
+    const style={
+        searchDrop:{
+            position:"absolute",
+            top:"20px",
+            display:"block",
+        },
+        searchList:{
+            padding:"5px",
+            borderBottom: "1px solid #555",
+            display:"block",
+            background:"#eee",
+            cursor: "pointer",
+        }
+    }
+
+    return(
+        <div style={{position:"relative"}}>
+            <input type="text" placeholder="Autofill search bar" onChange={onType} />
+            <div style={style.searchDrop}>
+                {
+                    _.map(list, (item, index)=>{
+                        return(
+                            <div key={_.uniqueId()} style={style.searchList} onClick={whenSelected.bind(item)}>{item.name}</div>
+                        )
+                    })
+                }
+            </div>
+        </div>
+
+    )
+}

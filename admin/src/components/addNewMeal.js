@@ -3,21 +3,20 @@ import Heading from './heading';
 import {Grid, Row, Col} from 'react-bootstrap';
 import { Field, FieldArray, reduxForm } from 'redux-form';
 import {connect} from 'react-redux';
-import {fetchAllCategories, fetchAllMealTypes, addNewMeal} from '../actions/mealInventoryActions'
+import {fetchAllCategories, fetchAllMealTypes, fetchAllIngredients, addNewMeal} from '../actions/mealInventoryActions'
 import Icon from './icon';
-import {renderOption, renderTextarea} from './commonFilters'
+import {renderOption, renderTextarea, AutoFill} from './commonFilters'
 import _ from 'lodash';
 import Button from './button'
 import Image from './image'
 import Dropzone from 'react-dropzone';
 
-class AddNewProduct extends Component{
+class AddNewMeal extends Component{
     constructor(){
         super()
         this.state={
             allCategories:null,
             category:'',
-            selectedCategory:'',
             selectedType:'',
             selectedStatus:'Inactive',
             images:[
@@ -32,7 +31,9 @@ class AddNewProduct extends Component{
             ],
             file:[],
             mealType:'',
-            status:['Active', 'Inactive']
+            selectedList:[],
+            selectedStatus:'',
+            allStatus:['Active', 'Inactive']
         }
     }
     componentWillMount(){
@@ -40,12 +41,13 @@ class AddNewProduct extends Component{
         .then(response=>
             this.setState({allCategories: this.props.allCategories
             })
-        )
+        );
         if(!this.props.allMealTypes)this.props.fetchAllMealTypes()
         .then(response=>
             this.setState({allMealTypes: this.props.allMealTypes
             })
-        )
+        );
+        if(!this.props.allIngredients)this.props.fetchAllIngredients()
 
     }
     parseSpecificationJSX(item, index, label, objectName ){
@@ -154,16 +156,26 @@ class AddNewProduct extends Component{
         )
 
     }
-
+    ingredientSelected(){
+        this.setState({selectedList:[...this.state.selectedList, arguments[0]]})
+    }
     onSubmit(values){
         //call action creators to upload the product...
-        this.props.addNewProduct(_.assign(values, (_.omit(this.state, ['allCategories','allCurrentSubcategroies', 'reviewQuestions', 'rate', 'type', 'status' ]))))
-        // .then(data=> this.props.history.push('/userAccount'))
+        if(this.state.selectedList){
+            values.ingredients=_.map(this.state.selectedList, (item, index)=>{
+                return (item._id)
+            })
+        }
+        let fromState= _.omit(this.state, ['allCategories', 'allMealTypes', 'selectedType', 'allStatus', 'selectedList','selectedStatus'  ])
+        let allValues =_.assign(values, fromState)
+        console.log(allValues)
+        this.props.addNewMeal(allValues)
+        .then(data=> this.props.history.push('/userAccount'))
     }
     render(){
 
-        let {allCategories, allMealTypes, allCurrentSubcategroies, selectedType, mealType, category, rate, status, selectedStatus}=this.state
-        const {handleSubmit}=this.props;
+        let {allCategories, allMealTypes,  allCurrentSubcategroies, selectedType, mealType, category, rate, allStatus, status, selectedList}=this.state
+        const {handleSubmit, allIngredients}=this.props;
         // let categoryOptions=["Please wait, categories are loading"];
         // let subCategoryOptions=["Please wait, subCategories are loading"];
         return(
@@ -179,15 +191,30 @@ class AddNewProduct extends Component{
                             </select>
                         </div>
                         <div className="field half">
-                            <select name="subCategory" onChange={(e)=>this.setState({mealType:e.target.value})}   value={mealType}>
+                            <select name="mealType" onChange={(e)=>this.setState({mealType:e.target.value})}   value={mealType}>
                                 {renderOption(allMealTypes, '_id', 'name')}
                             </select>
+                        </div>
+                        <div className="field half">
+                            <AutoFill selectedList={selectedList} placeHolder="Type an Ingredient" minLength={3} list={allIngredients} whenSelected={this.ingredientSelected.bind(this)} />
                         </div>
                         <div className="field half">
                             <Field component={this.renderInput} type="text" name="name" placeholder="Name of the Meal" />
                         </div>
                         <div className="field half">
                             <Field component={renderTextarea} name="description" placeholder="Give a brief description of this Meal" rows="7" />
+                        </div>
+                        <div className="field half">
+                            <Field component={this.renderInput} type="text" name="totalCalories" placeholder="Total Calories Content" />
+                        </div>
+                        <div className="field half">
+                            <Field component={this.renderInput} type="text" name="foodPoints" placeholder="Total Food Point" />
+                        </div>
+                        <div className="field half">
+                            <Field component={this.renderInput} type="text" name="costPerServing" placeholder="Total Cost" />
+                        </div>
+                        <div className="field half">
+                            <Field component={this.renderInput} type="text" name="pricePerServing" placeholder="Selling Price" />
                         </div>
                     </Col>
 
@@ -198,8 +225,8 @@ class AddNewProduct extends Component{
                         </ul>
                     </Col>
                     <div className="field half">
-                        <select name="rateDuration" onChange={(e)=>this.setState({selectedStatus:e.target.value})}   value={selectedStatus}>
-                            {renderOption(status)}
+                        <select name="rateDuration" onChange={(e)=>this.setState({status:e.target.value})}   value={status}>
+                            {renderOption(allStatus)}
                         </select>
                     </div>
                     <input type="submit" value="Save" icon="save" />
@@ -221,12 +248,13 @@ function validate(formProps) {
 function mapStateToProps(state) {
   return { errorMessage: state.user.error,
            allCategories: state.inventory.allCategories,
-           allMealTypes: state.inventory.allMealTypes
+           allMealTypes: state.inventory.allMealTypes,
+           allIngredients: state.inventory.allIngredients
    };
 }
 export default reduxForm({
     validate,
     form: 'addNewMeal'
 })(
-    connect(mapStateToProps, {fetchAllCategories, fetchAllMealTypes, addNewMeal})(AddNewProduct)
+    connect(mapStateToProps, {fetchAllCategories, fetchAllMealTypes, fetchAllIngredients, addNewMeal})(AddNewMeal)
 )

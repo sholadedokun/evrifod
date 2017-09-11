@@ -2,27 +2,20 @@ var mongoose=require('mongoose');
 var Schema = mongoose.Schema
 var bcrypt= require('bcrypt-nodejs');
 var SALT_WORK_FACTOR=10;
-var inventorySchema= new Schema({
+var mealSchema= new Schema({
     category: {type:Schema.Types.ObjectId,  ref:'category'},
-    subCategory:{type:Schema.Types.ObjectId, ref:'subcategory'},
-    productManager:{type:Schema.Types.ObjectId, ref:'user'},
-    // type:{type:String, required:true},
+    mealType:{type:Schema.Types.ObjectId, ref:'subcategory'},
     name:{type:String, required:true},
     description:{type:String, required:true},
-    address:String,
-    lg:String,
-    state:String,
-    country:String,
     profilePic:String,
-    allPic:String,
+    allPic:[{type:String}],
     status:String,
-    rate:Number,
-    keyFeatures:[{type:Schema.Types.ObjectId, ref:'keyFeatures'}],
-    inventorySettings:{type:Schema.Types.ObjectId, ref:'inventorySettings'},
-    specifications:[{type:Schema.Types.ObjectId, ref:'specifications'}],
-    offerDetails:[{type:Schema.Types.ObjectId, ref:'offerDetails'}],
-    offerConditions:[{type:Schema.Types.ObjectId, ref:'offerConditions'}],
+    totalCalories:Number,
+    foodPoints:Number,
+    costPerServing:Number,
+    pricePerServing:Number,
     likes:[{type:Schema.Types.ObjectId, ref:'likes'}],
+    ingredients:[{type:Schema.Types.ObjectId, ref:'ingredients'}],
     comments:[{type:Schema.Types.ObjectId, ref:'comments'}],
     dateCreated:{ type: Date, default: Date.now },
     lastUpdated:{ type: Date, default: Date.now }
@@ -42,7 +35,7 @@ var commentsSchema= new Schema({
 var inventorySettingsSchema= new Schema({
     price: Number,
     discount: Number,
-    inventoryId:{type:Schema.Types.ObjectId, ref:'inventory'},
+    inventoryId:{type:Schema.Types.ObjectId, ref:'meal'},
     dateCreated:{type: Date, default: Date.now}
 });
 var categorySchema= new Schema({
@@ -64,7 +57,7 @@ var nutritionClassSchema= new Schema({
     dateCreated:{type: Date, default: Date.now}
 })
 var ingredientsSchema= new Schema({
-    ingredients:[{type:Schema.Types.ObjectId, ref:'nutritionClass'}],
+    nutrients:[{type:Schema.Types.ObjectId, ref:'nutritionClass'}],
     name: {type:String, required:true, index:{unique:true, dropDups: true}},
     description: {type:String, required:true, index:{unique:true, dropDups: true}},
     avartar:String,
@@ -122,7 +115,7 @@ var emailSubscriberSchema= new Schema({
     source:String,
     dateCreated:{ type: Date, default: Date.now }
 })
-module.exports.inventory = mongoose.model('inventory', inventorySchema);
+module.exports.meal = mongoose.model('meal', mealSchema);
 module.exports.category= mongoose.model('category', categorySchema);
 module.exports.mealType= mongoose.model('mealType', mealTypeSchema);
 module.exports.nutritionClass= mongoose.model('nutritionClass', nutritionClassSchema);

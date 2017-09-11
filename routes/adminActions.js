@@ -46,6 +46,13 @@ router.get('/nutritions', function(req, res, next) {
         res.json(nutritionClass)
     })
 });
+router.get('/ingredients', function(req, res, next) {
+    adminSchema.ingredients.find()
+    .exec(function(err, nutritionClass){
+        if(err) return res.send(err);
+        res.json(nutritionClass)
+    })
+});
 
 //get a particular post
 router.get('/:id', function(req, res, next){
@@ -103,21 +110,10 @@ router.get('/userLogin/:id', function(req, res, next) {
 
 //send a post
 // router.post('/multer', upload.single('file'));
-router.post('/inventory', function(req, res, next){
-    adminSchema.inventory.create(req.body, function(err, post){
+router.post('/addMeal', function(req, res, next){
+    adminSchema.meal.create(req.body, function(err, post){
         if(err) return res.send(err)
-        req.body.propertyId=post._id;
-        adminSchema.inventorySettings.create(req.body, function(err, newPost){
-            var updates={biddingSettings:newPost._id}
-            var posttag={tags:req.body.tag, propertyId:post._id }
-            adminSchema.tags.create(posttag, function(err, tag){
-                updates.inventoryTags=tag._id;
-                adminSchema.inventory.findByIdAndUpdate(post._id, updates, function(err, update){
-                    if(err)return res.send(err)
-                    res.json(update)
-                })
-            })
-        })
+        res.json({message:'Meal succefully Added', post})
     })
 });
 router.post('/category', function(req, res, next){

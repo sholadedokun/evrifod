@@ -2,7 +2,8 @@
 export const FETCH_CATEGORIES = 'fetch_categories';
 export const FETCH_MEAL_TYPES = 'fetch_meal_types';
 export const FETCH_NUTRITION = 'fetch_nutrition';
-export const ADD_NEW_PRODUCT= "add_new_product";
+export const FETCH_INGREDIENTS = 'fetch_ingredients';
+export const ADD_NEW_MEAL= "add_new_meal";
 export const FETCH_CITYNAME_ERROR = 'fetch_cityname_error';
 export const FETCH_AUTOCOMPLETE = 'fetch_autocomplete';
 export const FETCH_AUTOCOMPLETE_ERROR = 'fetch_autocomplete_error';

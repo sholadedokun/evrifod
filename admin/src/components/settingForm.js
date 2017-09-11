@@ -14,29 +14,14 @@ class settingForm  extends Component{
     }
     onSubmit(values){
         if(this.state.selectedList){
-
-            values.ingredients=_.map(this.state.selectedList, (item, index)=>{
+            values.nutrients=_.map(this.state.selectedList, (item, index)=>{
                 return (item._id)
             })
         }
         this.props.onSubmitting(values);
         // .then(data=> this.props.history.push('/userAccount'))
     }
-    searchList(e){
-        if(e.target.value.length >= 3){
-            let filteredList=_.filter(this.props.allNutritions, (item)=>{
-                console.log(item)
-                if(item.name.toLowerCase().indexOf(e.target.value.toLowerCase()) >-1){
-                    return item
-                }
-            })
-            this.setState({NutrientList:filteredList})
-        }
-        else{
-            this.setState({NutrientList:[]})
-        }
 
-    }
     itemSelected(item, e){
         this.setState({selectedList:[...this.state.selectedList, arguments[0]], NutrientList:[]})
     }
@@ -48,7 +33,7 @@ class settingForm  extends Component{
                 <form onSubmit={ handleSubmit(this.onSubmit.bind(this)) }>
                     {
                         (name==="Ingredient")?
-                            <AutoFill selectedList={selectedList} onType={this.searchList.bind(this)} list={NutrientList} whenSelected={this.itemSelected.bind(this)} />
+                            <AutoFill selectedList={selectedList} minLength={3} list={allNutritions} placeHolder="Type a Nutrition Class" whenSelected={this.itemSelected.bind(this)} />
                         :
                         ''
                     }

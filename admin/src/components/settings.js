@@ -15,7 +15,7 @@ class settings extends Component{
                     endpoint:'category',
                 },
                 "Meal Type": {
-                    enpoint:'mealtype',
+                    endpoint:'mealtype',
                 },
                 "Nutrition Class":{
                     endpoint:'nutrition',
@@ -33,7 +33,6 @@ class settings extends Component{
                 <Heading title={`Add New ${this.state.currentSettingsTitle}`} marginBottom="5px" size="sm"/>
                 <SettingForm  name={this.state.currentSettingsTitle} onSubmitting={this.postValues.bind(this)} allNutritions={this.props.allNutritions} />
             </Col>
-
         )
     }
     getSettingForm(e){
@@ -58,7 +57,7 @@ class settings extends Component{
                         {
                             _.map(settingOptions, (item, index)=>{
                                 return(
-                                    <option value={index}>Add New {index}</option>
+                                    <option key={_.uniqueId()} value={index}>Add New {index}</option>
                                 )
                             })
                         }

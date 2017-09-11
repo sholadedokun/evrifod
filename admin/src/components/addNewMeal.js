@@ -168,7 +168,7 @@ class AddNewProduct extends Component{
         // let subCategoryOptions=["Please wait, subCategories are loading"];
         return(
             <Col xs={12} className="addNewProduct">
-                <Heading size="md" title="Add New Product" icon="plus" marginBottom='1em' />
+                <Heading size="md" title="Add New Meal" icon="plus" marginBottom='1em' />
 
                 <form onSubmit={ handleSubmit(this.onSubmit.bind(this)) }>
                     <Col xs={12}>

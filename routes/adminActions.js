@@ -131,14 +131,18 @@ router.post('/mealtype', function(req, res, next){
         if(err) return res.send(err)
         res.json(post);
     })
-
 });
 router.post('/nutrition', function(req, res, next){
     adminSchema.nutritionClass.create(req.body, function(err, post){
         if(err) return res.send(err)
         res.json(post);
     })
-
+});
+router.post('/ingredients', function(req, res, next){
+    adminSchema.ingredients.create(req.body, function(err, post){
+        if(err) return res.send(err)
+        res.json(post);
+    })
 });
 router.post('/biddings', function(req, res, next){
     adminSchema.biddingHistory.create(req.body, function(err, post){

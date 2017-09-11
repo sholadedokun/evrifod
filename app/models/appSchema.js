@@ -63,6 +63,13 @@ var nutritionClassSchema= new Schema({
     avartar:String,
     dateCreated:{type: Date, default: Date.now}
 })
+var ingredientsSchema= new Schema({
+    ingredients:[{type:Schema.Types.ObjectId, ref:'nutritionClass'}],
+    name: {type:String, required:true, index:{unique:true, dropDups: true}},
+    description: {type:String, required:true, index:{unique:true, dropDups: true}},
+    avartar:String,
+    dateCreated:{type: Date, default: Date.now}
+})
 var userSchema= new Schema({
     firstName:String,
     lastName:String,
@@ -119,6 +126,7 @@ module.exports.inventory = mongoose.model('inventory', inventorySchema);
 module.exports.category= mongoose.model('category', categorySchema);
 module.exports.mealType= mongoose.model('mealType', mealTypeSchema);
 module.exports.nutritionClass= mongoose.model('nutritionClass', nutritionClassSchema);
+module.exports.ingredients= mongoose.model('ingredients', ingredientsSchema);
 module.exports.inventorySettings = mongoose.model('inventorySettings', inventorySettingsSchema);
 module.exports.user = mongoose.model('user', userSchema);
 module.exports.tags = mongoose.model('tags', tagSchema);

@@ -8,11 +8,17 @@ class settingForm  extends Component{
     constructor(){
         super();
         this.state={
-            NutrientList:''
+            NutrientList:'',
+            selectedList:[]
         }
     }
     onSubmit(values){
-        //call action creators to upload the category...
+        if(this.state.selectedList){
+
+            values.ingredients=_.map(this.state.selectedList, (item, index)=>{
+                return (item._id)
+            })
+        }
         this.props.onSubmitting(values);
         // .then(data=> this.props.history.push('/userAccount'))
     }
@@ -32,17 +38,17 @@ class settingForm  extends Component{
 
     }
     itemSelected(item, e){
-        console.log(item, e)
+        this.setState({selectedList:[...this.state.selectedList, arguments[0]], NutrientList:[]})
     }
     render(){
         const {handleSubmit, name, allNutritions}=this.props;
-        console.log(allNutritions)
+        const {selectedList, NutrientList} =this.state
         return(
             <Col xs={12}>
                 <form onSubmit={ handleSubmit(this.onSubmit.bind(this)) }>
                     {
                         (name==="Ingredient")?
-                            <AutoFill minLetters={3} onType={this.searchList.bind(this)} list={this.state.NutrientList} whenSelected={this.itemSelected.bind(this)} />
+                            <AutoFill selectedList={selectedList} onType={this.searchList.bind(this)} list={NutrientList} whenSelected={this.itemSelected.bind(this)} />
                         :
                         ''
                     }

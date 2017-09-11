@@ -60,7 +60,7 @@ export function renderAlert() {
     );
   }
 }
-export function AutoFill({list, whenSelected, onType}){
+export function AutoFill({list, whenSelected, onType, selectedList}){
     const style={
         searchDrop:{
             position:"absolute",
@@ -73,9 +73,12 @@ export function AutoFill({list, whenSelected, onType}){
             display:"block",
             background:"#eee",
             cursor: "pointer",
+        },
+        selectedList:{
+            padding:"3px 5px",
+            background:"#fefefe"
         }
     }
-
     return(
         <div style={{position:"relative"}}>
             <input type="text" placeholder="Autofill search bar" onChange={onType} />
@@ -83,11 +86,18 @@ export function AutoFill({list, whenSelected, onType}){
                 {
                     _.map(list, (item, index)=>{
                         return(
-                            <div key={_.uniqueId()} style={style.searchList} onClick={whenSelected.bind(item)}>{item.name}</div>
+                            <span key={_.uniqueId()} style={style.searchList} onClick={whenSelected.bind(this, item)} data={item}>{item.name}</span>
                         )
                     })
                 }
             </div>
+            {
+                _.map(selectedList, (item, list)=>{
+                    return(
+                        <span key={_.uniqueId()} style={style.selectedList}>{item.name}</span>
+                    )
+                })
+            }
         </div>
 
     )

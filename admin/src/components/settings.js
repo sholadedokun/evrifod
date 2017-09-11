@@ -13,7 +13,6 @@ class settings extends Component{
             settingOptions:{
                 Category: {
                     endpoint:'category',
-
                 },
                 "Meal Type": {
                     enpoint:'mealtype',
@@ -22,9 +21,8 @@ class settings extends Component{
                     endpoint:'nutrition',
                 },
                 "Ingredient":{
-                    endpoint:'ingredient',
+                    endpoint:'ingredients',
                 }
-
             },
             currentSettingsTitle:'Category'
         }

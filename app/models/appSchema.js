@@ -93,8 +93,9 @@ var orderSchema= new Schema({
     userId:{type:Schema.Types.ObjectId, ref:'user', required:true},
     deliveryDate:{type: Date, required:true},
     inventory:{type:Schema.Types.ObjectId, ref:'inventory',  required: true},
-    orderDate:{type: Date, required: true},
+    orderDate:{type: Date, default: Date.now},
     subscriptionId:{type:Schema.Types.ObjectId, ref:'subscribedPlan',  required: true },
+    status:{type:String, default:'placed'},
     dateCreated:{type: Date, default: Date.now}
 })
 var subscribedPlanSchema= new Schema({
@@ -166,7 +167,7 @@ module.exports.inventory = mongoose.model('inventory', inventorySchema);
 module.exports.category= mongoose.model('category', categorySchema);
 module.exports.type= mongoose.model('type', typeSchema);
 module.exports.inventorySettings = mongoose.model('inventorySettings', inventorySettingsSchema);
-module.exports.order = mongoose.model('order', orderSchema);
+module.exports.orders = mongoose.model('orders', orderSchema);
 module.exports.plan = mongoose.model('plan', planSchema);
 module.exports.subscribedPlan = mongoose.model('subscribedPlan', subscribedPlanSchema);
 module.exports.user = mongoose.model('user', userSchema);

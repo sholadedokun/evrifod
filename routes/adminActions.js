@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
-
+var _ = require('lodash')
 var mongoose=require('mongoose');
 var adminSchema=require('../app/models/appSchema.js');
+var moment= require ('moment');
 // var multer=require('multer');
 
 /* GET users listing. */
@@ -119,10 +120,37 @@ router.post('/category', function(req, res, next){
     })
 });
 router.post('/orders', function(req, res, next){
-    adminSchema.orders.create(req.body, function(err, post){
-        if(err) return res.send(err)
-        res.json(post);
+    //select all active subscription from the database
+    adminSchema.subscribedPlan.find({status:'active'}).populate('planId')
+    .exec(function(err, subScription)
+    {
+        if(err) return console.log(err)
+        //iterating over every valid subscription
+        _.map(subScription, (item, index)=>{
+            let nextDay = moment().add(1, 'days').startOf('day').toDate();
+            let order={
+                userId:item.userId,
+                subscriptionId:item._id,
+                inventory:item.userId,
+                deliveryDate: nextDay
+            }
+            //check to see if the user as already place an order
+            adminSchema.orders.find({userId:item.userId, subscriptionId:item._id, deliveryDate:nextDay})
+            .exec(function(err, orders){
+                if(err) return console.log(err)
+                else{
+                    //only make auto-order if the user has not placed the any order.
+                    if(orders.length == 0){
+                        adminSchema.orders.create(order, function(err, post){
+                            if(err) return res.send(err)
+                        })
+                    }
+                }
+            })
+
+        })
     })
+
 });
 router.post('/type', function(req, res, next){
     adminSchema.type.create(req.body, function(err, post){

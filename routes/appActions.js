@@ -104,8 +104,11 @@ function addOrQuery(req, res, next){
 }
 function tokenForUser(user) {
   const timestamp = new Date().getTime();
-  console.log(jwt.encode({ sub: user.id, iat: timestamp }, config.secret))
   return jwt.encode({ sub: user.id, iat: timestamp }, config.secret);
+}
+function decodeToken(token){
+    let decoded = jwt.decode(token, config.secret);
+    return decoded.sub;
 }
 function sendSuccessMessage(res,noun,data,verb){
     res.json({message:`${noun} successfully ${verb}!"`, data});
@@ -120,6 +123,31 @@ router.get('/checkLoggedin', function(req, res, next) {
 router.get('/logOut', function(req, res, next) {
     req.logout();
     res.send(200);
+})
+router.get('/plans', function(req, res, next) {
+    appSchema.plan.find()
+    .exec(function(err, plans)
+    {
+        if(err) return next(err);
+        res.json(plans)
+    })
+})
+router.get('/order', function(req, res, next) {
+    appSchema.order.findById(req.params.id)
+    .exec(function(err, orders)
+    {
+        if(err) return next(err);
+        res.json(orders)
+    })
+})
+router.get('/subScription', function(req, res, next) {
+    appSchema.subscribedPlan.find({userId:decodeToken(req.headers.authorization)})
+    .populate('planId')
+    .exec(function(err, subScription)
+    {
+        if(err) return next(err);
+        res.json(subScription)
+    })
 })
 router.get('/inventory', addFilters, addOrQuery, function(req, res, next) {
     let toPopulate = req.query.populate || ''
@@ -311,10 +339,15 @@ router.post('/inventory',  function(req, res, next){
         }
     })
 });
-router.post('/category', function(req, res, next){
-    appSchema.category.create(req.body, function(err, post){
-        if(err) return next(err);
-        res.json(post);
+
+router.post('/subscribeToPlan/:id', function(req, res, next){
+    let body={userId:decodeToken(req.headers.authorization), planId:req.params.id}
+    appSchema.subscribedPlan.create(body, function(err, post){
+        if(err) res.send(err);
+        else{
+            res.json(post);
+        }
+
     })
 });
 
@@ -326,30 +359,23 @@ router.post('/subcategory', function(req, res, next){
 
 });
 router.post('/signup', function(req, res, next){
-    appSchema.user.find({$or:[{userName:req.body.userName}, {email:req.body.email}]})
-    .exec(function(err, user){
-        if(err) return next(err);
-        if(user.length==0){
-                var newuser= new appSchema.user(req.body);
-                newuser.save(function(err){
-                    if (err) throw err;
-                    // fetch user and test password verification
-                    appSchema.user.findOne({$or:[{userName:req.body.userName}, {email:req.body.email}]}, function(err, userData) {
-                        if (err) throw err;
+        var newuser= new appSchema.user(req.body);
+        newuser.save(function(err){
+            if (err) res.status(422).send({ error: err });
+            // fetch user and test password verification
+            appSchema.user.findOne({$or:[{email:req.body.email}]}, function(err, userData) {
+                if (err) res.status(422).send({ error: err });
 
-                        // test a matching password
-                        userData.comparePassword(req.body.password, function(err, isMatch) {
-                            if (err) throw err;
-                            if(isMatch){
-                                // Repond to request indicating the user was created
-                                res.json({ token: tokenForUser(user) });
-                            };
-                        });
-                    })
-                })
-        }
-        else{  res.status(422).send({ error: 'Email or Username is in use' });  }
-    })
+                // test a matching password
+                userData.comparePassword(req.body.password, function(err, isMatch) {
+                    if (err) res.status(422).send({ error: err });
+                    if(isMatch){
+                        // Repond to request indicating the user was created
+                        res.json({ token: tokenForUser(userData) });
+                    };
+                });
+            })
+        })
 });
 router.post('/contact', function(req, res, next){
     var params=req.body;

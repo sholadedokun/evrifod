@@ -7,12 +7,12 @@ const config = require('../config/config')
 // const ExtractJwt = require('passport-jwt').ExtractJwt;
 
 passport.use(new LocalStrategy({
-    usernameField: "identity",
+    usernameField: "username",
     passwordField: "password"
   },
   function(username, password, done) {
 
-    appSchema.user.findOne({$or:[{userName:username}, {email:username}]}, function(err, userData) {
+    appSchema.user.findOne({$or:[{email:username}]}, function(err, userData) {
         if (err) return done(err);
         if (!userData){
             return done(null, false, {message: "Wrong Username"} )

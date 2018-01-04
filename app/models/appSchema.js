@@ -27,12 +27,14 @@ var inventorySchema= new Schema({
     dateCreated:{ type: Date, default: Date.now },
     lastUpdated:{ type: Date, default: Date.now }
 });
-var reviewQuestionsSchema= new Schema({
-    title: String,
-    questionText: Array,
-    inventoryId:{type:Schema.Types.ObjectId, ref:'inventory'},
-    dateCreated:{type: Date, default: Date.now}
-});
+var deliveryAddressSchema= new Schema({
+    userId:{type:Schema.Types.ObjectId, ref:'user'},
+    street:String,
+    landMark:String,
+    localGovernment: String,
+    city:String,
+    State:String
+})
 var keyFeaturesSchema= new Schema({
     title: String,
     description: String,
@@ -87,14 +89,35 @@ var typeSchema= new Schema({
     avartar:String,
     dateCreated:{type: Date, default: Date.now}
 })
+var orderSchema= new Schema({
+    userId:{type:Schema.Types.ObjectId, ref:'user', required:true},
+    deliveryDate:{type: Date, required:true},
+    inventory:{type:Schema.Types.ObjectId, ref:'inventory',  required: true},
+    orderDate:{type: Date, required: true},
+    subscriptionId:{type:Schema.Types.ObjectId, ref:'subscribedPlan',  required: true },
+    dateCreated:{type: Date, default: Date.now}
+})
+var subscribedPlanSchema= new Schema({
+    userId:{type:Schema.Types.ObjectId, ref:'user', required:true},
+    planId:{type:Schema.Types.ObjectId, ref:'plan',  required: true},
+    status:{type:String, default: 'active'},
+    subscribedDate:{type: Date,  default: Date.now},
+    dateCreated:{type: Date, default: Date.now}
+})
+var planSchema= new Schema({
+    name:String,
+    amount:Number,
+    mealNumber:Number,
+    discount:Number,
+    dateCreated:{type: Date, default: Date.now}
+})
 var userSchema= new Schema({
-    firstName:String,
-    lastName:String,
-    userName:{type:String, required:true, index:{unique:true, dropDups: true}},
+    firstName:{type:String, required:true},
+    lastName:{type:String, required:true},
     location:String,
     email:{type:String, required:true, index:{unique:true, dropDups: true}},
     password:{type:String, required:true},
-    phone:String,
+    phone:{type:String, required:true},
     userTests:[{type:Schema.Types.ObjectId, ref:'inventory'}],
     userProducts:[{type:Schema.Types.ObjectId, ref:'inventory'}],
     dateCreated:{ type: Date, default: Date.now },
@@ -143,7 +166,9 @@ module.exports.inventory = mongoose.model('inventory', inventorySchema);
 module.exports.category= mongoose.model('category', categorySchema);
 module.exports.type= mongoose.model('type', typeSchema);
 module.exports.inventorySettings = mongoose.model('inventorySettings', inventorySettingsSchema);
-module.exports.reviewQuestions = mongoose.model('reviewQuestions', reviewQuestionsSchema);
+module.exports.order = mongoose.model('order', orderSchema);
+module.exports.plan = mongoose.model('plan', planSchema);
+module.exports.subscribedPlan = mongoose.model('subscribedPlan', subscribedPlanSchema);
 module.exports.user = mongoose.model('user', userSchema);
 module.exports.tags = mongoose.model('tags', tagSchema);
 module.exports.emailSubscriber = mongoose.model('emailSubscriber', emailSubscriberSchema);

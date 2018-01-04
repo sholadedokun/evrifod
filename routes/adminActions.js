@@ -22,8 +22,6 @@ router.get('/inventory', function(req, res, next) {
 
 });
 router.get('/category', function(req, res, next){
-
-
     adminSchema.category.find()
     .populate('subCategories')
     .exec(function(err, category)
@@ -120,6 +118,12 @@ router.post('/category', function(req, res, next){
         res.json(post);
     })
 });
+router.post('/orders', function(req, res, next){
+    adminSchema.orders.create(req.body, function(err, post){
+        if(err) return res.send(err)
+        res.json(post);
+    })
+});
 router.post('/type', function(req, res, next){
     adminSchema.type.create(req.body, function(err, post){
         if(err) return res.send(err)
@@ -127,25 +131,10 @@ router.post('/type', function(req, res, next){
     })
 
 });
-router.post('/biddings', function(req, res, next){
-    adminSchema.biddingHistory.create(req.body, function(err, post){
+router.post('/createPlan', function(req, res, next){
+    adminSchema.plan.create(req.body, function(err, post){
         if(err) return res.send(err)
-        adminSchema.inventory.findByIdAndUpdate(
-            req.body.inventory,
-            {$push:{biddingHistory:post}},
-            {safe: true, upsert: true, new : true},
-            function(err, inventory){
-                if(err)return res.send(err)
-                adminSchema.user.findByIdAndUpdate(
-                    req.body.userId,
-                    {$push:{userBids:inventory}},
-                    function(err, user){
-                    if(err)return res.send(err)
-                        res.json(inventory);
-                    }
-                )
-            }
-        )
+        res.json(post);
     })
 
 });

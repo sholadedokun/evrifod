@@ -23,7 +23,7 @@ export function addNewCategory(categoryValues) {
                     reject()
                 });
         })
-  }
+    }
 }
 export function addNewMealType(typeValues) {
     return function(dispatch) {

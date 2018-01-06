@@ -84,7 +84,10 @@ app.use(express.static(path.join(__dirname, 'admin')));
 app.post('/upload', function(req, res, next) {
     upload(req, res, function(err) {
         if (err) res.json('no images :' + err)
-        res.json(req.files)
+        else{
+            res.json(req.files)
+        }
+
     })
 })
 app.use('/adminActions', adminActions);

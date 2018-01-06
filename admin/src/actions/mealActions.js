@@ -2,14 +2,14 @@ import axios from 'axios';
 import { BrowserRouter as Router } from 'react-router-dom';
 import {
   FETCH_CATEGORIES,
-  FETCH_SUBCATEGORIES,
+  FETCH_TYPES,
   ADD_NEW_PRODUCT,
   UNAUTH_USER,
   AUTH_ERROR,
   FETCH_OFFERS
 } from './actionTypes';
 import _ from "lodash";
-const ROOT_URL = 'http://localhost:3000/appActions';
+const ROOT_URL = 'http://localhost:3000/adminActions';
 export function fetchAllCategories() {
     return function(dispatch) {
         return new Promise( (resolve, reject)=>{
@@ -27,22 +27,21 @@ export function fetchAllCategories() {
         })
   }
 }
-export function fetchAllSubCategories(category) {
+export function fetchAllTypes() {
     return function(dispatch) {
         return new Promise( (resolve, reject)=>{
-            axios.get(`${ROOT_URL}/subCategory`, {category})
-                .then(response => {
-                    dispatch({ type: FETCH_SUBCATEGORIES,
-                        payload: {categoryId:category, subCategories:response.data}
-                     });
-                     resolve(category)
-                })
-                .catch((e) => {
-                    dispatch(inventoryError('Error Fetching Categoriee , Please Check your internet and try again.'));
-                    reject(e)
-                });
+            axios.get(`${ROOT_URL}/types`)
+            .then(response => {
+                dispatch({ type: FETCH_TYPES,
+                    payload: response.data
+                 });
             })
-        }
+            .catch((e) => {
+                dispatch(inventoryError('Error Fetching Categoriee , Please Check your internet and try again.'));
+                reject(e)
+            });
+        })
+    }
 }
 export function inventoryError(error) {
   return {

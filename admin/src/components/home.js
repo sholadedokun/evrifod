@@ -59,7 +59,6 @@ class userProfile extends (Component){
     }
     render(){
         const {match}=this.props
-        console.log(this.props)
         return(
             <Grid className="newPage">
                 <Router>

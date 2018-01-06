@@ -31,12 +31,11 @@ router.get('/category', function(req, res, next){
         res.json(category)
     })
 });
-router.get('/subcategory', function(req, res, next) {
-    adminSchema.subcategory.find()
-    .populate('category')
-    .exec(function(err, subcategory){
+router.get('/types', function(req, res, next) {
+    adminSchema.type.find()
+    .exec(function(err, types){
         if(err) return res.send(err);
-        res.json(subcategory)
+        res.json(types)
     })
 });
 
@@ -99,18 +98,7 @@ router.get('/userLogin/:id', function(req, res, next) {
 router.post('/inventory', function(req, res, next){
     adminSchema.inventory.create(req.body, function(err, post){
         if(err) return res.send(err)
-        req.body.propertyId=post._id;
-        adminSchema.inventorySettings.create(req.body, function(err, newPost){
-            var updates={biddingSettings:newPost._id}
-            var posttag={tags:req.body.tag, propertyId:post._id }
-            adminSchema.tags.create(posttag, function(err, tag){
-                updates.inventoryTags=tag._id;
-                adminSchema.inventory.findByIdAndUpdate(post._id, updates, function(err, update){
-                    if(err)return res.send(err)
-                    res.json(update)
-                })
-            })
-        })
+        res.json(post)
     })
 });
 router.post('/category', function(req, res, next){

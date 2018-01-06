@@ -132,8 +132,8 @@ router.get('/plans', function(req, res, next) {
         res.json(plans)
     })
 })
-router.get('/order', function(req, res, next) {
-    appSchema.order.findById(req.params.id)
+router.get('/getCurrentOrder', function(req, res, next) {
+    appSchema.orders.find({userId:decodeToken(req.headers.authorization)})
     .exec(function(err, orders)
     {
         if(err) return next(err);

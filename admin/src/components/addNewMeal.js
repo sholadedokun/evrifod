@@ -17,6 +17,7 @@ class AddNewProduct extends Component{
         this.state={
             allCategories:null,
             category:'',
+            type:'',
             selectedCategory:'',
             selectedType:'',
             selectedSubType:'',

@@ -74,23 +74,8 @@ export function addNewMeal(document){
                 )
             })
             let profilePic = allPic[0];
-            let type= document.selectedType;
-            let rate = {type:document.selectedRate, duration:document.selectedRateDuration, quantity:document.rateQuantity, value: document.rateValue}
-            let Features = _.pick(document, ['key Features', 'specifications'])
-            var others = _.map(Features, (item, key)=> {
-                return {
-                    title:key,
-                    value:item
-                }
-            })
 
-            let reviewQuestions = _.map(_.pick(document, ["Product","Design","User Interface","Packaging"]), (item,index)=>{
-                return {
-                    title:index,
-                    questions:item
-                }
-            })
-            let inventory = {..._.pick(document, ['name', 'description', 'category', 'subCategory', "selectedSubType", "selectedStatus" ]), allPic, type, profilePic, others, rate, reviewQuestions}
+            let inventory = {..._.pick(document, ['name', 'description', 'category', 'type',  "selectedStatus" ]), allPic, profilePic}
             axios.post(`${ROOT_URL}/inventory`, inventory)
                 .then(response => {
                     dispatch({ type: ADD_NEW_PRODUCT,

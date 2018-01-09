@@ -9,7 +9,7 @@ var inventorySchema= new Schema({
     description:{type:String, required:true},
     profilePic:String,
     allPic:String,
-    status:String,
+    status:{type:String, default:'Active'},
     likes:[{type:Schema.Types.ObjectId, ref:'likes'}],
     comments:[{type:Schema.Types.ObjectId, ref:'comments'}],
     dateCreated:{ type: Date, default: Date.now },
@@ -107,8 +107,7 @@ var userSchema= new Schema({
     email:{type:String, required:true, index:{unique:true, dropDups: true}},
     password:{type:String, required:true},
     phone:{type:String, required:true},
-    userTests:[{type:Schema.Types.ObjectId, ref:'inventory'}],
-    userProducts:[{type:Schema.Types.ObjectId, ref:'inventory'}],
+    defaultMeal:{type:Schema.Types.ObjectId, ref:'inventory' },
     dateCreated:{ type: Date, default: Date.now },
     lastLogin:{ type: Date, default: Date.now }
 })

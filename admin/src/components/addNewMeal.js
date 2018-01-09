@@ -13,7 +13,7 @@ import Dropzone from 'react-dropzone';
 
 class AddNewProduct extends Component{
     constructor(){
-        super()
+        super();
         this.state={
             allCategories:null,
             category:'',
@@ -44,9 +44,7 @@ class AddNewProduct extends Component{
                 this.setState({allCategories: this.props.allCategories
                 })
             )
-
         }
-
     }
     renderInput(field){
         const {meta:{touched, error}} = field;
@@ -55,12 +53,11 @@ class AddNewProduct extends Component{
         return(
             <span>
                 <input className={classN}  type={field.type} placeholder={field.placeholder}  {...field.input} />
-                <span className='textError'>{touched ? error : ''}</span>
+                <span className='textError'> {touched ? error : ''}</span>
             </span>
         )
     }
     renderSelect(field){
-
         const {meta:{touched, error},optionArray, input} = field;
         const classN= `${ touched && error ? 'inputError':'' }`;
         field.input.name= field.input.name.replace(' ', '')

@@ -170,9 +170,9 @@ router.get('/inventory', addFilters, addOrQuery, function(req, res, next) {
     .exec (function(err, inventory)
     {
         if(err) return next(err);
-        inventory = inventory.filter(function(invent){
-            if(invent.inventorySettings) return true;
-        })
+        // inventory = inventory.filter(function(invent){
+        //     if(invent.inventorySettings) return true;
+        // })
         res.json(inventory)
     })
 
@@ -220,12 +220,9 @@ router.get('/subcategory/:id', function(req, res, next) {
         res.json(subcategory)
     })
 });
-router.get('/userProfile/:id', function(req, res, next) {
-    appSchema.user.findById(req.params.id)
-    .populate({
-        path:'userTests',
-        populate:{path: 'inventorySettings productManager'}
-    })
+router.get('/userProfile', function(req, res, next) {
+    appSchema.user.findById(decodeToken(req.headers.authorization))
+    .populate('defaultMeal')
     .exec(function(err, user){
         if(err) return next(err);
         res.json(user)

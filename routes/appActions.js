@@ -113,6 +113,7 @@ function decodeToken(token){
 function sendSuccessMessage(res,noun,data,verb){
     res.json({message:`${noun} successfully ${verb}!"`, data});
 }
+
 /* GET users listing. */
 router.get('/serverDate', function(req, res, next) {
     res.json({date:Date.now()});
@@ -336,7 +337,6 @@ router.post('/inventory',  function(req, res, next){
         }
     })
 });
-
 router.post('/subscribeToPlan/:id', function(req, res, next){
     let body={userId:decodeToken(req.headers.authorization), planId:req.params.id}
     appSchema.subscribedPlan.create(body, function(err, post){
@@ -347,11 +347,17 @@ router.post('/subscribeToPlan/:id', function(req, res, next){
 
     })
 });
-
-router.post('/subcategory', function(req, res, next){
-    appSchema.subcategory.create(req.body, function(err, post){
+router.post('/deliveryAddress', function(req, res, next){
+    req.body.userId=decodeToken(req.headers.authorization)
+    appSchema.deliveryAddress.create(req.body, function(err, post){
         if(err) return next(err)
-        res.json(post);
+        else{
+            updateDocument(req.body.userId, {currentDeliveryAddress:post._id}, 'user', function(err, post){
+                if(err)return next(err)
+                res.json({message:'Delivery Address update was successfully', deliveryAdd:post})
+            })
+        }
+
     })
 
 });
@@ -397,7 +403,6 @@ router.post('/contact', function(req, res, next){
     res.json(prepareEmail(fromE, to, subject, emailbody,bcc));
 });
 router.post('/addSubscriber', function(req, res, next){
-    console.log(req.body.emailAddress)
     appSchema.emailSubscriber.find({emailAddress:req.body.emailAddress})
     .exec(function(err, emailSubscriber){
         if(err) return next(err);
@@ -433,15 +438,7 @@ router.post('/likes',  function(req, res, next) {
         })
     })
 });
-router.post('/comments',  function(req, res, next) {
-    appSchema.comments.create(req.body, function(err, post){
-        if(err) res.send(err)
-        appSchema.comments.find({objectId:post.objectId}, function(err, object){
-            if(err)return next(err);
-            res.json({message:'Post comment was successfully', id:post.id, totalComment:object.length});
-        })
-    })
-});
+
 
 router.put('/:id', function(req, res, next){
     Inventory.findByIdAndUpdate(req.params.id, req.body, function(err, post){
@@ -449,11 +446,16 @@ router.put('/:id', function(req, res, next){
         res.json(post)
     })
 });
-router.put('/comments/:id', function(req, res, next){
-    updateDocument(req.params.id, req.body, 'comments', function(err, post){
-        if(err)return next(err)
-        res.json({message:'Comment update was successfully', comment:post})
+router.put('/userProfile', function(req, res, next){
+    console.log('here')
+    updateDocument(decodeToken(req.headers.authorization), req.body, 'user', function(err, post){
+        if(err)res.json({error:err})
+        res.json({message:'Userprofile Update was successfully', comment:post})
     })
+});
+router.put('/comments/:id', function(req, res, next){
+    console.log('here')
+    res.json({ther:'here'});
 });
 router.delete('/:id', function(req, res, next){
     Inventory.findByIdAndRemove(req.params.id, req.body, function(err, post){

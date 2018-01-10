@@ -17,11 +17,11 @@ var inventorySchema= new Schema({
 });
 var deliveryAddressSchema= new Schema({
     userId:{type:Schema.Types.ObjectId, ref:'user'},
-    street:String,
+    street:{type:String, required:true},
     landMark:String,
     localGovernment: String,
     city:String,
-    State:String
+    state:String
 })
 var keyFeaturesSchema= new Schema({
     title: String,
@@ -108,6 +108,7 @@ var userSchema= new Schema({
     password:{type:String, required:true},
     phone:{type:String, required:true},
     defaultMeal:{type:Schema.Types.ObjectId, ref:'inventory' },
+    currentDeliveryAddress:{type:Schema.Types.ObjectId, ref:'deliveryAddress' },
     dateCreated:{ type: Date, default: Date.now },
     lastLogin:{ type: Date, default: Date.now }
 })
@@ -153,7 +154,7 @@ var emailSubscriberSchema= new Schema({
 module.exports.inventory = mongoose.model('inventory', inventorySchema);
 module.exports.category= mongoose.model('category', categorySchema);
 module.exports.type= mongoose.model('type', typeSchema);
-module.exports.inventorySettings = mongoose.model('inventorySettings', inventorySettingsSchema);
+module.exports.deliveryAddress = mongoose.model('deliveryAddress', deliveryAddressSchema);
 module.exports.orders = mongoose.model('orders', orderSchema);
 module.exports.plan = mongoose.model('plan', planSchema);
 module.exports.subscribedPlan = mongoose.model('subscribedPlan', subscribedPlanSchema);

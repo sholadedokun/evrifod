@@ -86,6 +86,14 @@ var orderSchema= new Schema({
     status:{type:String, default:'placed'},
     dateCreated:{type: Date, default: Date.now}
 })
+// orderSchema.pre('create', function(next) {
+//     var curreDate =
+//     var user = this;
+//     // only hash the password if it has been modified (or is new)
+//     if (!user.isModified('password')) return next();
+//
+//
+// });
 var subscribedPlanSchema= new Schema({
     userId:{type:Schema.Types.ObjectId, ref:'user', required:true},
     planId:{type:Schema.Types.ObjectId, ref:'plan',  required: true},

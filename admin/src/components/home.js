@@ -5,6 +5,7 @@ import ProductContainer from './productContainer';
 import { BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import AddnewMeal from './addNewMeal';
 import Settings from './settings';
+import OrderManagement from './orderManagement';
 import Icon from './icon';
 import _ from 'lodash';
 import {connect} from 'react-redux';
@@ -26,6 +27,13 @@ class userProfile extends (Component){
             icon:'plus',
             path: '/addMeal',
             component: AddnewMeal
+        },
+        orderManagement:{
+            label:'Manage Order',
+            name:'manageOrder',
+            icon:'plus',
+            path: '/manageOrder',
+            component: OrderManagement
         },
         settings:{
             label:'Settings',

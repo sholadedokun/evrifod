@@ -135,6 +135,7 @@ router.get('/plans', function(req, res, next) {
 })
 router.get('/getCurrentOrder', function(req, res, next) {
     appSchema.orders.find({userId:decodeToken(req.headers.authorization)})
+    .populate('inventory')
     .exec(function(err, orders)
     {
         if(err) return next(err);

@@ -107,27 +107,56 @@ router.post('/category', function(req, res, next){
         res.json(post);
     })
 });
+router.post('/changeAllOrderStatus', function(req, res, next){
+    const {coverageType, status, orders}=req.body
+    switch(coverageType){
+        case "allOrders":
+            let currentDate = moment().startOf('day').add(13, 'hours').toDate();
+            let errorOrders =[];
+            adminSchema.orders.find({deliveryDate:currentDate})
+            .exec(function(err, orders){
+                if(err) return console.log(err)
+                else{
+                    _.map(orders, (item,index)=>{
+                        adminSchema.orders.findByIdAndUpdate(item._id, {status}, function(err, order){
+                            if(err){
+                                errorOrders.push(item)
+                            }
+                            if(index == order.length -1){
+                                res.json({
+                                    message:'Auto Order is completed'
+                                })
+                            }
+
+                        })
+                    })
+                    res.json(errorOrders)
+                }
+            })
+    }
+})
 router.post('/orders', function(req, res, next){
-    //select all active subscription from the database
-    adminSchema.subscribedPlan.find({status:'active'}).populate('planId')
+    // select all active subscription from the database
+    adminSchema.subscribedPlan.find({status:'active'}).populate('planId userId')
     .exec(function(err, subScription)
     {
         if(err) return console.log(err)
-        //iterating over every valid subscription
+        // iterating over every valid subscription
         _.map(subScription, (item, index)=>{
-            let nextDay = moment().add(1, 'days').startOf('day').toDate();
+            let nextDay = moment().add(1, 'days').startOf('day').add(13, 'hours').toDate();
+            
             let order={
                 userId:item.userId,
                 subscriptionId:item._id,
-                inventory:item.userId,
+                inventory:item.userId.defaultMeal,
                 deliveryDate: nextDay
             }
-            //check to see if the user as already place an order
+            // check to see if the user as already place an order
             adminSchema.orders.find({userId:item.userId, subscriptionId:item._id, deliveryDate:nextDay})
             .exec(function(err, orders){
                 if(err) return console.log(err)
                 else{
-                    //only make auto-order if the user has not placed the any order.
+                    // only make auto-order if the user has not placed any order.
                     if(orders.length == 0){
                         adminSchema.orders.create(order, function(err, post){
                             if(err) return res.send(err)

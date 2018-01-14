@@ -4,10 +4,11 @@ import {
   AUTH_USER,
   UNAUTH_USER,
   AUTH_ERROR,
-  FETCH_OFFERS
+  FETCH_OFFERS,
+  CHANGE_STATUS
 } from './actionTypes';
 
-const ROOT_URL = 'http://localhost:3000/appActions';
+const ROOT_URL = 'http://localhost:3000/adminActions';
 
 export function signinUser({ identity, password }) {
   return function(dispatch) {
@@ -30,7 +31,22 @@ export function signinUser({ identity, password }) {
     })
   }
 }
+export function changeOrderStatus(values) {
+    return function(dispatch) {
+        return new Promise( (resolve)=>{
+            axios.post(`${ROOT_URL}/changeAllOrderStatus`, values)
+            .then(response => {
 
+                dispatch({ type: CHANGE_STATUS, payload:response.data });
+                resolve (response)
+            })
+            .catch(error => {
+                let errorData= error.response.data.error
+                dispatch(authError(errorData));
+            });
+        })
+    }
+}
 export function signupUser(values) {
     return function(dispatch) {
         return new Promise( (resolve)=>{

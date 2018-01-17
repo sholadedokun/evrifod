@@ -144,24 +144,47 @@ router.post('/orders', function(req, res, next){
         // iterating over every valid subscription
         _.map(subScription, (item, index)=>{
             let nextDay = moment().add(1, 'days').startOf('day').add(13, 'hours').toDate();
-            
+
             let order={
                 userId:item.userId,
                 subscriptionId:item._id,
                 inventory:item.userId.defaultMeal,
                 deliveryDate: nextDay
             }
-            // check to see if the user as already place an order
-            adminSchema.orders.find({userId:item.userId, subscriptionId:item._id, deliveryDate:nextDay})
+
+            // retrieve all users previous order
+            adminSchema.orders.find({userId:item.userId, subscriptionId:item._id})
             .exec(function(err, orders){
                 if(err) return console.log(err)
                 else{
-                    // only make auto-order if the user has not placed any order.
-                    if(orders.length == 0){
-                        adminSchema.orders.create(order, function(err, post){
-                            if(err) return res.send(err)
+                    //check to see if user has exhausted all his orders
+                    if(item.planId.mealNumber > orders.length){
+                        // check to see if an order as been made for the next day
+                        let nextDayOrder= orders.filter(order=> order.deliveryDate == nextDay)
+                        if(nextDayOrder.length == 0){
+                            adminSchema.orders.create(order, function(err, post){
+                                if(err) return res.send(err)
+                                else{
+                                    //send notification if  user's subscription is almost out
+                                    if(item.planId.mealNumber - orders.length==1){
+                                        console.log('This is your last subscription')
+                                    }
+                                    res.send('done')
+                                }
+                            })
+                        }
+                    }
+                    else{
+                        // the subscription as been fullfilled and so the subscription status as to be changed to completed
+                        adminSchema.subscribedPlan.findByIdAndUpdate(item._id, {status:'completed'}, function(err, sub){
+                            if(err)//return res.send(err)
+                            return console.log('error occured '+ err) ;
+                            else{
+                                console.log(sub)
+                            }
                         })
                     }
+
                 }
             })
 

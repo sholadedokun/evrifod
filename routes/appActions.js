@@ -343,7 +343,12 @@ router.post('/subscribeToPlan/:id', function(req, res, next){
     appSchema.subscribedPlan.create(body, function(err, post){
         if(err) res.send(err);
         else{
-            res.json(post);
+            appSchema.subscribedPlan.find({userId:decodeToken(req.headers.authorization)})
+            .exec(function(err, plans)
+            {
+                if(err) return next(err);
+                res.json(plans)
+            })
         }
 
     })

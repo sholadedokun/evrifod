@@ -99,6 +99,7 @@ var subscribedPlanSchema= new Schema({
     planId:{type:Schema.Types.ObjectId, ref:'plan',  required: true},
     status:{type:String, default: 'active'},
     subscribedDate:{type: Date,  default: Date.now},
+    end:{type:Date},
     dateCreated:{type: Date, default: Date.now}
 })
 var planSchema= new Schema({

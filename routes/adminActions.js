@@ -127,7 +127,6 @@ router.post('/changeAllOrderStatus', function(req, res, next){
                                     message:'Auto Order is completed'
                                 })
                             }
-
                         })
                     })
                     res.json(errorOrders)
@@ -176,10 +175,11 @@ router.post('/orders', function(req, res, next){
                     }
                     else{
                         // the subscription as been fullfilled and so the subscription status as to be changed to completed
-                        adminSchema.subscribedPlan.findByIdAndUpdate(item._id, {status:'completed'}, function(err, sub){
+                        adminSchema.subscribedPlan.findByIdAndUpdate(item._id, {status:'completed', end:Date.now}, function(err, sub){
                             if(err)//return res.send(err)
                             return console.log('error occured '+ err) ;
                             else{
+                                //send notification about subscription end
                                 console.log(sub)
                             }
                         })

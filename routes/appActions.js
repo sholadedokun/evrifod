@@ -444,7 +444,17 @@ router.post('/likes',  function(req, res, next) {
         })
     })
 });
+router.post('/placeOrder',  function(req, res, next) {
+    req.body.userId=decodeToken(req.headers.authorization);
+     order = new appSchema.orders(req.body);
+    order.save((err, result)=>{
+        if(err) res.send(err)
+        else {
+            res.json(result)
+        }
+    })
 
+});
 
 router.put('/:id', function(req, res, next){
     Inventory.findByIdAndUpdate(req.params.id, req.body, function(err, post){
